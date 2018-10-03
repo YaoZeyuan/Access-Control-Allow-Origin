@@ -8,6 +8,7 @@ this fork is try to improve some point
 [ ] replace `Access-Control-Allow-Origin: *` into `Access-Control-Allow-Origin: origin host`
 [ ] replace package manager `brower` into `webpack`
 
+webpack temlate via => [chrome-extension-webpack-boilerplate](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate)
 
 Chrome extension: https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
 
