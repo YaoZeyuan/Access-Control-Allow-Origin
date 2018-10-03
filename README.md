@@ -1,6 +1,13 @@
 Access-Control-Allow-Origin
 ===========================
 
-[![Join the chat at https://gitter.im/vitvad/Access-Control-Allow-Origin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vitvad/Access-Control-Allow-Origin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Thanks for [@vitvad](https://github.com/vitvad) and this project is based on his plugin
+
+this fork is try to improve some point
+
+[ ] replace `Access-Control-Allow-Origin: *` into `Access-Control-Allow-Origin: origin host`
+
 
 Chrome extension: https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
+
+Wellcome to start/fork
