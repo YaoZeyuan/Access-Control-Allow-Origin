@@ -10,13 +10,13 @@ chrome.storage.local.get({ 'isActive': false }, function (result) {
         console.log('closed')
         chrome.browserAction.setIcon({ path: "off.png" })
         console.log('chrome =>', chrome)
-		chrome.extension.getBackgroundPage()
+		chrome.extension.getBackgroundPage().reload()
     } else {
         // alert('is off, try to open2')
         chrome.storage.local.set({ isActive: true })
         console.log('opened')
         chrome.browserAction.setIcon({ path: "on.png" })
         console.log('chrome =>', chrome)
-		chrome.extension.getBackgroundPage()
+		chrome.extension.getBackgroundPage().reload()
     }
 })

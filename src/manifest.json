@@ -10,7 +10,7 @@
 	},
 	"browser_action": {
 		"default_icon": "off.png",
-		"default_title": "Allow-Control-Allow-Origin",
+		"default_title": "cros-anywhere",
 		"default_popup": "popup.html"
 	},
 	"permissions": [

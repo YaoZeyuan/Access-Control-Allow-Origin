@@ -140,7 +140,7 @@ let responseListener = function (details) {
 /*On install*/
 chrome.runtime.onInstalled.addListener(function () {
 	console.log('chrome.runtime.onInstalled.addListener')
-	chrome.storage.local.set({ 'isActive': true });
+	chrome.storage.local.set({ 'isActive': false });
 	reload();
 });
 
@@ -150,6 +150,7 @@ function reload() {
 	chrome.storage.local.get({ 'isActive': false }, function (result) {
 
 		let { isActive } = result
+		console.log("now isActive =>", isActive)
 
 		/*Remove Listeners*/
 		chrome.webRequest.onHeadersReceived.removeListener(responseListener);
@@ -171,3 +172,6 @@ function reload() {
 		}
 	});
 }
+
+// 必须要显式注入到window里, 否则popup无法调用
+window.reload = reload
