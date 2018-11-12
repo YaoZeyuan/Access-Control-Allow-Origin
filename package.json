@@ -7,6 +7,9 @@
     "start": "node utils/webserver.js"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5",
+    "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.25.0",

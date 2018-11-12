@@ -1,11 +1,11 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    fileSystem = require("fs"),
-    env = require("./utils/env"),
-    CleanWebpackPlugin = require("clean-webpack-plugin"),
-    CopyWebpackPlugin = require("copy-webpack-plugin"),
-    HtmlWebpackPlugin = require("html-webpack-plugin"),
-    WriteFilePlugin = require("write-file-webpack-plugin");
+  path = require("path"),
+  fileSystem = require("fs"),
+  env = require("./utils/env"),
+  CleanWebpackPlugin = require("clean-webpack-plugin"),
+  CopyWebpackPlugin = require("copy-webpack-plugin"),
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
+  WriteFilePlugin = require("write-file-webpack-plugin");
 
 // load the secrets
 var alias = {};
@@ -30,6 +30,15 @@ var options = {
   },
   module: {
     rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory:true,
+          presets: ['@babel/preset-env']
+        }
+      },
       {
         test: /\.css$/,
         loader: "style-loader!css-loader",
@@ -88,7 +97,7 @@ var options = {
 };
 
 if (env.NODE_ENV === "development") {
-  options.devtool = "cheap-module-eval-source-map";
+  options.devtool = "source-map";
 }
 
 module.exports = options;
