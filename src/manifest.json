@@ -1,5 +1,7 @@
 {
-  "name": "cros-anywhere",
+	"name": "cros-anywhere",
+	"author": "姚泽源",
+	"homepage_url": "https://www.yaozeyuan.online/",
   "icons": {
     "128": "icon-128.png"
   },
