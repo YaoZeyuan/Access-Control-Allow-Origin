@@ -7,8 +7,13 @@ import parse from 'url-parse'
 
 function parseHost(url) {
 	let result = parse(url)
-	console.log('result =>' ,result)
+	console.log('url解析结果 =>' ,result)
 	let host = `${result['protocol']}//${result['host']}`
+	// let debugKey = 'Gs126MiZpBA-UN7'
+	// let url = _.get(details, ['url'], '')
+	// if(url.indexOf(debugKey) > 0){
+	// 	console.log('catch error in request!')
+	// }
 	return host
 }
 
@@ -37,10 +42,10 @@ let requestListener = function (details) {
 	let requestId = _.get(details, ['requestId'], 0)
 	let tabId = _.get(details, ['tabId'], 0)
 	
-	console.log("requestHost =>", requestHost)
+	console.log(`tabId => ${tabId}`, `requestId => ${requestId}`,"请求url地址 =>", requestHost)
 	
 	// @todo 允许配置origin字段
-	let originHost = ''
+	let originHost = requestHost || ''
 	let requestHeaders = ''
 	let requestMethods = ''
 
@@ -86,6 +91,12 @@ let responseListener = function (details) {
 	let requestId = _.get(details, ['requestId'], 0)
 	let tabId = _.get(details, ['tabId'], 0)
 
+	// let debugKey = 'Gs126MiZpBA-UN7'
+	// let url = _.get(details, ['url'], '')
+	// if(url.indexOf(debugKey) > 0){
+	// 	console.log('catch error in request!')
+	// }
+
 	if (_.has(requestMap, [tabId, requestId]) === false) {
 		// 没有储存相应跨域配置信息, 直接跳过
 		console.log("没有储存相应跨域配置信息, 直接跳过")
@@ -94,23 +105,29 @@ let responseListener = function (details) {
 
 	console.log("检测到跨域, 开始处理")
 	let originHost = _.get(requestMap, [tabId, requestId, REQUEST_HEADER_Origin], '')
+	if(originHost === ''){
+		console.log('originHost为空, 自动跳过')
+		return {}
+	}
 
 	let appendHeaderList = []
 
-	// for (let responseHeader of details.responseHeaders) {
-	// 	switch (responseHeader.name) {
-	// 		case RESPONSE_HEADER_Access_Control_Allow_Origin:
-	// 			responseHeader.value = originHost
-	// 			appendHeaderList.push(responseHeader)
-	// 			break;
-	// 		// 以下不必处理, 直接加进去即可
-	// 		case RESPONSE_HEADER_Access_Control_Allow_Methods:
-	// 		case RESPONSE_HEADER_Access_Control_Allow_Headers:
-	// 		case RESPONSE_HEADER_Access_Control_Allow_Credentials:
-	// 			break;
-	// 		default:
-	// 	}
-	// }
+	let rawHeaderList = []
+	for (let responseHeader of details.responseHeaders) {
+		let lowerCaseHeaderName = responseHeader.name.toLocaleLowerCase() 
+		switch (lowerCaseHeaderName) {
+			// 以下响应头需要特殊处理
+			case RESPONSE_HEADER_Access_Control_Allow_Origin.toLocaleLowerCase():
+			case RESPONSE_HEADER_Access_Control_Allow_Methods.toLocaleLowerCase():
+			case RESPONSE_HEADER_Access_Control_Allow_Headers.toLocaleLowerCase():
+			case RESPONSE_HEADER_Access_Control_Allow_Credentials.toLocaleLowerCase():
+				console.log("检测到关键header,自动跳过")
+				continue
+				break;
+			default:
+				rawHeaderList.push(responseHeader)
+		}
+	}
 	appendHeaderList.push({
 		name: RESPONSE_HEADER_Access_Control_Allow_Origin,
 		value: originHost
@@ -131,7 +148,8 @@ let responseListener = function (details) {
 		})
 	}
 
-	details.responseHeaders = details.responseHeaders.concat(appendHeaderList)
+	// 覆盖原有headers列表
+	details.responseHeaders = rawHeaderList.concat(appendHeaderList)
 	console.log("response finish =>", details.responseHeaders)
 	return { responseHeaders: details.responseHeaders };
 };
