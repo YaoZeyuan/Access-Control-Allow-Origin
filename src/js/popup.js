@@ -1,5 +1,4 @@
 import "../css/popup.css";
-// import hello from "./popup/example";
 
 
 chrome.storage.local.get({ 'isActive': false }, function (result) {
