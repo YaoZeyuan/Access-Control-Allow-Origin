@@ -1,6 +1,6 @@
 {
   "name": "cros-anywhere",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Chrome新版禁用了Access-Control-Allow-Origin的*响应值, 必须显式允许来自Origin的请求",
   "scripts": {
     "build": "node utils/build.js",
