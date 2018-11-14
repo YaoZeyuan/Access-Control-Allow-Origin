@@ -44,16 +44,18 @@ let requestListener = function (details) {
 	
 	console.log(`tabId => ${tabId}`, `requestId => ${requestId}`,"请求url地址 =>", requestHost)
 	
-	// @todo 允许配置origin字段
-	let originHost = requestHost || ''
+	// @todo 应允许配置origin字段
+	let originHost = parseHost(_.get(details, ['initiator'], ''))
+
 	let requestHeaders = ''
 	let requestMethods = ''
 
 	// 只需要把请求头备份下来
 	// 确保存入 Origin, Access_Control_Request_Headers, Access_Control_Request_Method 三个的信息即可
 	for (let requestHeader of details.requestHeaders) {
-		switch (requestHeader.name) {
-			case REQUEST_HEADER_Origin:
+		let requestHeaderLowerCase = requestHeader.name.toLocaleLowerCase()
+		switch (requestHeaderLowerCase) {
+			case REQUEST_HEADER_Origin.toLocaleLowerCase():
 				originHost = requestHeader.value
 				// 若请求地址和当前地址一致, 直接返回即可
 				if (originHost === requestHost) {
@@ -62,20 +64,22 @@ let requestListener = function (details) {
 				}else{
 					console.log("跨域请求 =>" , {originHost , requestHost})
 				}
-			case REQUEST_HEADER_Access_Control_Request_Headers:
+				break;
+			case REQUEST_HEADER_Access_Control_Request_Headers.toLocaleLowerCase():
 				requestHeaders = requestHeader.value
 				break;
-			case REQUEST_HEADER_Access_Control_Request_Method:
+			case REQUEST_HEADER_Access_Control_Request_Method.toLocaleLowerCase():
 				requestMethods = requestHeader.value
 				break;
 			default:
 		}
 	}
 	if(requestHeaders){
-		_.set(requestMap, [tabId, requestId, REQUEST_HEADER_Access_Control_Request_Headers], originHost)
+		console.log('为跨域请求设置REQUEST_HEADER_Access_Control_Request_Headers =>', requestHeaders)
+		_.set(requestMap, [tabId, requestId, REQUEST_HEADER_Access_Control_Request_Headers], requestHeaders)
 	}
 	if(requestMethods){
-		_.set(requestMap, [tabId, requestId, REQUEST_HEADER_Access_Control_Request_Method], originHost)
+		_.set(requestMap, [tabId, requestId, REQUEST_HEADER_Access_Control_Request_Method], requestMethods)
 	}
 
 	// 只要跨域, 就把源站地址记上
