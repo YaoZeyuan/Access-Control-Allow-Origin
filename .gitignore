@@ -4,3 +4,6 @@ secrets.*.js
 
 #   没必要记录lock文件
 package-lock.json
+
+#   打包文件
+build.*
